@@ -1,0 +1,140 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% load pybo_filter %}
+{% block contents %}
+
+<div class="write">📌게시판 상세보기</div>
+<br/>
+<a href="#" class= "recommend btn btn-sm btn-secondary btn-block my-1" onclick="return confirm('작성자에게 정보가 전달됩니다. 정말 신청하시겠습니까?')">신청하기</a>
+<!-- <div style="border: 1px black solid; margin:20px 0px;"></div> -->
+
+<!-- <a href="/board/detail/{{board.id}}/modify/"><button>수정</button></a>
+<a href="/board/detail/{{board.id}}/delete/"><button>삭제</button></a> -->
+
+
+
+<!-- Main -->
+
+
+
+<div class="container mt-3">
+    <h2 class="border-bottom py-2">
+
+        <!-- <div>
+            게시판 종류 : {{board.board_name}}
+        </div> -->
+        <div class="write">
+            작성자 : {{board.writer}} | 작성일 : {{board.write_dttm}} | 조회수 : {{board.hits}}
+        </div>
+        <br/>
+        <div class="write">
+            제목 : {{board.title}}
+    </h2>
+</div>
+<!-- 질문영역 추천영역 -->
+<div class="row my-3">
+    <div class="col-1">
+        <div class="bg-light text-center p-3 border font-weight-bolder mb-1">{{board.voter.count}}</div>
+        <a href="{% url 'mateboard:vote_question' board.id %}"
+            class="recommend btn btn-sm btn-secondary btn-block my-1" onclick="return confirm('이 글을 추천하시겠습니까?')">추천</a>
+    </div>
+    <!-- 질문영역 추천영역 -->
+    <div class="col-11 ">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-text">
+
+                    📍내용📍 : {{board.contents|mark}}</div>
+                    {% if board.writer.user_id == login_session %}
+                    <a href="/mateboard/detail/{{board.id}}/modify/" class="btn btn-secondary">수정</a>
+                    <a href="/mateboard/detail/{{board.id}}/delete/" class="btn btn-secondary "onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+                    {% endif %}
+            </div>
+        </div>
+
+
+
+        <!-- #### 답변의 개수를 확인하기 위한 코드 ##### -->
+        <h5 class="border-bottom my-3 py-2">📍{{board.mateanswer_set.count}}개의 답변이 있습니다.📍</h5>
+        {% for answer in board.mateanswer_set.all %}
+
+
+        <!-- 답변 추천영역 -->
+        <div class="row my-3">
+            <div class="col-1">
+                <div class="bg-light text-center p-3 border font-weight-bolder mb-1">{{answer.voter.count}}</div>
+                <a href="{% url 'mateboard:vote_answer' answer.id %}"
+                    class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
+            </div>
+            <!-- 답변 추천영역 -->
+
+
+            <div class="col-11">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-text" style="white-space: pre-line;">{{ answer.content|mark }}</div>
+                        {% if answer.author.user_id == login_session %}
+                    <a href="/mateboard/detail/{{answer.id}}/answer_modify/" class="btn btn-secondary">수정</a>
+                    <a href="/mateboard/detail/{{answer.id}}/answer_delete/" class="btn btn-secondary">삭제</a>
+                    {% endif %}
+
+    
+                        <!-- <div class="d-flex justify-content-end">
+                <div class="badge badge-light p-2">
+                    {{ answer.create_date }} -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <form action="{% url 'mateboard:answer_create' board.id %}" method="post" class="my-3">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for field in form %}
+                {% if field.errors %}
+                <strong>{{ field.label }}</strong>
+                {{ field.errors }}
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <textarea name="content" id="content" {% if not user.is_authenticated %}disabled{% endif %}
+                    class="form-control" rows="10"></textarea>
+            </div>
+            <br/>
+                <input type="submit" value="답변 등록" class="btn btn-primary">
+        </form>
+        <!-- <button type="submit" class="btn btn-secondary">답변</button> -->
+        <a href="/mateboard" class="btn btn-secondary">돌아가기</a>
+        </form>
+    </div>
+
+    <style>
+        .write{
+        font-weight: 700;
+        font-size: 28px;
+        }
+    
+    </style>
+
+
+    {% endblock %}
+    {% block script %}
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $(".delete").on('click', function() {
+                if(confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = $(this).data('uri');
+                }
+            });
+            $(".recommend").on('click', function() {
+                if(confirm("정말로 추천하시겠습니까?")) {
+                    location.href = $(this).data('uri');
+                }
+            });
+        });
+        </script>
+    {% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'home/index.html' %}
+
+{% block contents %}
+
+<div>
+    <div>
+      팔로잉 : {{ person.followings.all|length }} / 팔로워 : {{ person.followers.all|length }}
+    </div>
+  
+    {% if user != person %}
+      <div>
+        <form action="{% url 'accounts:follow' person.pk%}" method='POST'>
+          {% csrf_token %}
+          {% if user in person.followers.all %}
+            <input type="submit" value='팔로우 취소'>
+          {% else %}
+            <input type="submit" value='팔로우'>
+          {% endif %}
+        </form>
+      </div>  
+    {% endif %}
+  </div>
+
+{% endblock contents %}

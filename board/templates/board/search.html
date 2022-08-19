@@ -1,0 +1,26 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+
+    {% if not blogs %}
+
+        <h1>검색 결과가 없습니다</h1>
+
+    {% else %}
+
+        {% for board in blogs.all %}
+        <div class="container"> 
+            <div class="card">
+                <div class="card-body">
+                    <h1>{{ board.title }}</h1>
+                    <p>{{ board.write_dttm | date:"Y-m-d" }}</p>
+                    <p>{{ board.contents }}<a href="{% url 'board:board_detail' blog.id %}"> ...자세히 보기</a></p> 
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+
+    {% endif %}
+
+{% endblock %}

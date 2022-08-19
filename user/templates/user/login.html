@@ -1,0 +1,81 @@
+{% extends 'home/index.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>맛남</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+{% block contents %}
+<body>
+    <div class="login">
+        <h4>맛남</h4>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            {% for form in forms %}
+            <div>
+                <label for="{{form.id_for_label}}">{{form.label}}</label>
+                {{form}}
+            </div>
+            {% endfor %}
+
+            {% if error %}
+            {{ error }}
+            {% endif %}
+            <br /> <br />
+            <button type="sumit" class='btn1' name="login-submit" value="login">로그인하기</button>
+
+
+            <br /> <br /> <br /> <br /> <br />
+
+            <div class="oneLine">
+                <div class="linkup">아직 회원이 아니시라면</div>
+                <a class="link" href="{% url 'user:register' %}"> 회원가입</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+
+<style>
+        .btn1{
+    border-radius: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+    height: 50px;
+    background: #ff4949;
+    border: none;
+    font-family: 'Montserrat';
+    font-size: 20px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+    .linkup{
+    color: gray;
+    font-family: 'Montserrat light';
+    font-size: 13px;
+    display: block;
+}
+
+.link{
+    color: #ff4949;
+    font-family: 'Montserrat light';
+    font-size: 15px;
+    font-weight:bold;
+    cursor: pointer;
+    text-decoration: underline;
+    display: block;
+}
+
+</style>
+
+</html>
+{% endblock contents %}

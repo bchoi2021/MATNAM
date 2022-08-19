@@ -1,0 +1,264 @@
+{% extends 'home/base.html' %}
+{% load pybo_filter %}
+{% block contents %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+    crossorigin="anonymous"></script>
+
+<div class="board">
+    <!-- <div class="py-board"> -->
+    <!-- <p>맛집 공유 게시판</p> -->
+
+    <div class="container my-3">
+        <div class="row justify-content-between my-3">  <!-- 양쪽정렬 justify-content-between로 변경 -->
+            <div class="col-2">
+                <select class="form-control so">
+                    <option value="recent" {% if so == 'recent' %}selected{% endif %}>
+                        최신순
+                    </option>
+                    <option value="recommend" {% if so == 'recommend' %}selected{% endif %}>
+                        추천순
+                    </option>
+                    <option value="popular" {% if so == 'popular' %}selected{% endif %}>
+                        인기순
+                    </option>
+                </select>
+            </div>
+            <div class="col-2 input-group">
+                <!-- <input type="text" class="form-control kw" value="{{ kw|default_if_none:"" }}">
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="button" id="btn_search">찾기</button>
+                </div> -->
+                <div><a href="{% url 'board:board_write' %}" class="btn btn-secondary">새 글쓰기</a></div>
+
+            </div>
+            <form id="searchForm" method="get" action="{% url 'board:index' %}">
+                <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:"" }}">
+                <input type="hidden" id="page" name="page" value="{{ page }}">
+                <input type="hidden" id="so" name="so" value="{{ so }}">
+            </form>
+
+          
+            <!-- 검색
+            <div id="search">
+              <input name="search" type="text">
+              <button class="btn btn-primary" type="submit">검색</button>
+            </div>
+            </form>
+        <div class="row my-3">
+
+            <div class="col-6">
+                <div class="input-group">
+                    <input type="text" id="search_kw" class="form-control" value="{{ kw|default_if_none:'' }}">
+                    <div class="input-group-append">
+                        <button class="" type="button" id="btn_search">찾기</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+            <!-- <form id="searchForm" method="get" action="{% url 'board:index' %}">
+                <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:"" }}">
+                <input type="hidden" id="page" name="page" value="{{ page }}">
+                <input type="hidden" id="so" name="so" value="{{ so }}">
+            </form> -->
+
+            <!-- <div style="border: 1px black solid; margin:20px 0px;"></div> -->
+        </div>
+        <table class="table">
+            <thead>
+                <tr class="text-center thead-dark">
+                <tr>
+                    <th>번호</th>
+                    <th>추천</th>
+                    <th style="width:50%">제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if question_list %}
+                {% for board in question_list %}
+                <tr class="text-center">
+                    <td>{{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}</td>
+
+
+                    <td>{{ board.voter.count }}</td>
+                    <!-- <td>
+                            {% if board.voter.all.count > 0 %}
+                            <span class="badge badge-warning px-2 py-1">
+                                {{ board.voter.all.count }}
+                            </span>
+                            {% endif %}
+                        </td> -->
+                    <td class="text-left">
+                        <a href="{% url 'board:board_detail' board.id %}">
+                            {{ board.title }}
+                            {% if board.answer_set.count > 0 %}
+                            <span class="text-danger small ml-2">
+                                {{ board.answer_set.count }}
+                            </span>
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td>{{ board.writer }}</td> <!-- 작성자 추가 -->
+                    <td>{{ board.write_dttm }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="3">질문이 없습니다.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- 첫페이지로 돌아가기 -->
+        <nav aria-label="pagination" class="mb-4">
+            <ul class="pagination justify-content-center">
+                {% if question_list.number > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">처음</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">처음</span>
+                </li>
+                {% endif %}
+
+                <!-- 이전 페이지 구현-->
+                {% if question_list.has_other_pages %}
+                {% if question_list.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ question_list.previous_page_number }}">이전</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">이전</span>
+                </li>
+                {% endif %}
+
+                <!-- 페이징 구현-->
+                {% for page_num in question_list.paginator.page_range %}
+                {% if question_list.number == page_num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ page_num }}
+                        <span class="sr-only">(current)</span>
+                    </span>
+                </li>
+                {% elif page_num > question_list.number|add:'-4' and page_num < question_list.number|add:'4' %} <li
+                    class="page-item">
+                    <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    <!-- 다음 페이지 구현-->
+                    {% if question_list.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">다음</span>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+
+                    <!-- 끝으로 돌아가기 -->
+                    {% if question_list.number != question_list.paginator.num_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ question_list.paginator.num_pages }}">끝</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">끝</span>
+                    </li>
+                    {% endif %}
+            </ul>
+        </nav>
+
+        <form id="searchForm" method="get" action="{% url 'board:index' %}">
+            <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+            <input type="hidden" id="page" name="page" value="{{ page }}">
+        </form>
+
+    </div>
+    <!-- <div>{{board.title}} / {{board.writer}} / {{board.write_dttm}}</div> -->
+
+
+
+</div>
+<!-- <div class="js-board">
+        <p>(자바스크립트 게시판)</p>
+        {% for board in js_boards %}
+        {% if board %}
+        <a href="/board/detail/{{board.id}}" target="_self">
+            <div>{{board.title}} / {{board.writer}} / {{board.write_dttm}}</div>
+            {% endif %}
+            {% endfor %}
+
+    </div> -->
+
+
+
+
+<style>
+    .board {
+        display: flex;
+    }
+
+    .py-board {
+        width: 50%;
+    }
+
+    .js-board {
+        width: 50%;
+        border-left: 2px black double;
+        padding-left: 25px;
+    }
+
+</style>
+
+
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+
+const page_elements = document.getElementsByClassName("page-link");
+Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        document.getElementById('page').value = this.dataset.page;
+        document.getElementById('searchForm').submit();
+    });
+});
+const btn_search = document.getElementById("btn_search");
+btn_search.addEventListener('click', function() {
+    document.getElementById('kw').value = document.getElementById('search_kw').value;
+    document.getElementById('page').value = 1;  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+    document.getElementById('searchForm').submit();
+});
+
+
+    $(document).ready(function () {
+        $(".page-link").on('click', function () {
+            $("#page").val($(this).data("page"));
+            $("#searchForm").submit();
+        });
+
+        $("#btn_search").on('click', function () {
+            $("#kw").val($(".kw").val());
+            $("#page").val(1);  // 검색 버튼을 클릭할 경우 1페이지부터 조회한다.
+            $("#searchForm").submit();
+        });
+
+        $(".so").on('change', function () {
+            $("#so").val($(this).val());
+            $("#page").val(1);
+            $("#searchForm").submit();
+        });
+    });
+</script>
+{% endblock %}

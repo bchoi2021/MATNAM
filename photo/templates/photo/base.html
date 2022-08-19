@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <title>{% block title %} JJango Web Programming {% endblock %}</title>
+
+    {% block extra-style %}{% endblock %}
+</head>
+<body style="padding-top:90px">
+
+<!--    home html -->
+    <nav class="navbar navbar-expand-lg bg-primary navbar-fixed-top navbar-dark" >
+        <span class="navbar-brand mx-5 mb-0 font-weight-bold font-italic">JJango - Python Web Programming</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav navbar-nav">
+            <li class="nav-item mx-1 btn btn-primary">
+                <a href="/"  class="nav-link btn-primary" >Home </a>
+            </li>
+
+            <li class="nav-item mx-1 btn btn-primary">
+                <a href="{% url 'board:board_list' %}" class="nav-link btn-primary" >Bookmark </a>
+            </li>
+            <li class="nav-item mx-1 btn btn-primary">
+                <a href="{% url 'board:board_list' %}" class="nav-link btn-primary" >Blog </a>
+            </li>
+            <li class="nav-item mx-1 btn btn-primary">
+                <a href="{% url 'photo:index' %}" class="nav-link" text-white>Photo </a>
+            </li>
+
+
+          </ul>
+
+          <form class="form-inline my-2" action="" method="post" role="search">
+              {% csrf_token %}
+                <input class="form-control mr-sm-2" type="search" placeholder="global search" name="search_word">
+          </form>
+        </div><!-- /.navbar-collapse -->
+
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+<!-- 하위 html 파일에서 변경하거나 추가할 가능성이 있는 부분에는  % block % 태그를 추가 -->
+    {% block footer %}{% endblock %}
+
+    {% block extra-script %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,85 @@
+body{
+    background: #f5f5f5;
+    height: 100vh;
+    width: 100%;
+    text-align: center;
+}
+
+h4{
+    font-family: 'Segoe UI', bold;
+    color:#ff4949;
+    font-weight: bolder;
+    font-size: 55px;
+    margin-top: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+form{
+    background: #f5f5f5;
+    display: inline-block;
+    align-items: center;
+    height: 270px;
+    width: 350px;
+    margin-bottom: 170px;
+}
+.text_area{
+    align-content: center;
+    background: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 50px;
+    display: block;
+}
+
+.text_input{
+    margin-top: 15.5px;
+    font-family: 'Montserrat regular';
+    font-size: 16px;
+    border: none;
+    width: 90%;
+    outline: none;
+}
+
+.btn{
+    border-radius: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+    height: 50px;
+    background: #ff4949;
+    border: none;
+    font-family: 'Montserrat';
+    font-size: 20px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.login{
+    display: inline-block;
+    background: #F5F5F5;
+    width: 434px;
+    height: 500px;
+    margin-top: 10%;
+    border-radius: 22px;
+}
+
+.linkup{
+    color: gray;
+    font-family: 'Montserrat light';
+    font-size: 13px;
+    display: block;
+}
+
+.link{
+    color: #ff4949;
+    font-family: 'Montserrat light';
+    font-size: 15px;
+    font-weight:bold;
+    cursor: pointer;
+    text-decoration: underline;
+    display: block;
+}
+
+.oneLine div,a {
+    display: inline;
+}

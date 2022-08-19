@@ -1,0 +1,30 @@
+{% extends 'home/index.html' %}
+
+{% block contents %}
+<div class="write">맛집 질문 글쓰기</div>
+<form action="" method="POST">
+    {% csrf_token %}
+    {% for form in forms %}
+    <div>
+        <label for="{{form.id_for_label}}">{{form.label}}</label>
+        {{form}}
+    </div>
+    {% endfor %}
+
+    {% if error %}
+    {{error}}
+    {% endif %}
+    <button type="submit" class="btn btn-secondary">저장하기</button>
+    <a href="/board" class="btn btn-secondary">돌아가기</a>
+    </form>
+
+</form>
+
+<style>
+    .write{
+    font-weight: 700;
+	font-size: 28px;
+    }
+
+</style>
+{% endblock contents %}
