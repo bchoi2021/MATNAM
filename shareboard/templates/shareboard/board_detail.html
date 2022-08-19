@@ -98,10 +98,12 @@
                 {% endfor %}
             </div>
             {% endif %}
+            {% if answer.author.user_id != board.writer.user_id %}
             <div class="form-group">
-                <textarea name="content" id="content" {% if not user.is_authenticated %}disabled{% endif %}
+                <textarea name="content" id="content" 
                     class="form-control" rows="10"></textarea>
             </div>
+            {% endif %}
             <br/>
                 <input type="submit" value="답변 등록" class="btn btn-primary">
         </form>

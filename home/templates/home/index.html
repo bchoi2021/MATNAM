@@ -45,8 +45,8 @@
             {% if login_session %}
             <a href="{% url 'user:logout' %}" class="btn" style="margin-left: -500px;position: absolute; top: 30px; left: 1600px;">로그아웃</a>
             {% else %}
-            <a href="{% url 'user:login' %}" class="btn" style="position: absolute;">로그인</a>
-            <a href="{% url 'user:register' %}" class="btn" style="position: absolute; top: 30px; left: 1800px;">회원가입</a>
+            <a href="{% url 'user:login' %}" class="btn"style="margin-left: -500px;position: absolute; top: 35px; left: 1800px;">로그인</a>
+            <a href="{% url 'user:register' %}" class="btn" style="margin-left: -500px;position: absolute; top: 35px; left: 1900px;">회원가입</a>
             {% endif %}
             <!-- <li class="nav-item">
                   <a class="nav-link" href="#">Features</a>

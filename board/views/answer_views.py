@@ -8,7 +8,7 @@ from board.forms import AnswerForm, FreeAnswerForm
 from board.models import Board, Answer, FreeBoard, FreeAnswer
 
 
-@login_required
+
 def answer_create(request, board_id):
     login_session = request.session.get('login_session', '')
     context = {'login_session': login_session}
@@ -69,7 +69,6 @@ def answer_modify(request, answer_id):
         return render(request, 'board/answer_modify.html', context)
 
 
-@login_required
 def vote_question(request, board_id):
     login_session = request.session.get('login_session', '')
 
@@ -87,7 +86,7 @@ def vote_question(request, board_id):
 )
 
 
-@login_required
+
 def vote_answer(request, board_id):
     login_session = request.session.get('login_session', '')
 
